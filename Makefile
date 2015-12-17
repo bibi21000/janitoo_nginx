@@ -136,7 +136,7 @@ endif
 	sudo cp websockets.conf /etc/mosquitto/conf.d/
 	sudo service mosquitto restart
 	sleep 2
-	netcat -zv 127.0.0.1 1-11000
+	netcat -zv 127.0.0.1 1-11000 2>&1|grep succeeded
 	@echo
 	@echo "Dependencies for ${MODULENAME} finished."
 
@@ -148,7 +148,7 @@ travis-deps: deps
 	@echo "Travis dependencies for ${MODULENAME} installed."
 
 tests:
-	netcat -zv 127.0.0.1 1-11000|grep 10001
+	netcat -zv 127.0.0.1 1-11000 2>&1|grep 10001
 	@echo
 	@echo "Tests for ${MODULENAME} finished."
 
