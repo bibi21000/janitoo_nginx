@@ -78,6 +78,7 @@ uninstall:
 
 deps:
 	@echo "Install mosquitto dependencies for ${MODULENAME} : $(distro):$(codename)."
+	lsb_release -a
 ifneq ('${DEBIANDEPS}','')
 	sudo apt-get install -y ${DEBIANDEPS}
 endif
