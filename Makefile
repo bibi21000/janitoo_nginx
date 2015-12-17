@@ -125,8 +125,7 @@ develop:
 	@echo "Install mosquitto for $(distro):$(codename)."
 ifeq ($(distro),Debian)
 	wget -qO - http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key | apt-key add -
-	cd /etc/apt/sources.list.d/
-	wget http://repo.mosquitto.org/debian/mosquitto-$(codename).list
+	cd /etc/apt/sources.list.d/ && wget http://repo.mosquitto.org/debian/mosquitto-$(codename).list
 	apt-get update
 endif
 ifeq ($(distro),Ubuntu)
