@@ -83,13 +83,9 @@ ifneq ('${DEBIANDEPS}','')
 endif
 	lsb_release -a
 	distro = $(shell lsb_release -a 2>/dev/null|grep Distributor|cut -f2 -d ":"|sed -e "s/\t//g" )
-	release = $(shell lsb_release -a 2>/dev/null|grep Release|cut -f2 -d ":"|sed -e "s/\t//g" )
-	codename = $(shell lsb_release -a 2>/dev/null|grep Codename|cut -f2 -d ":"|sed -e "s/\t//g" )
+	release := $(shell lsb_release -a 2>/dev/null|grep Release|cut -f2 -d ":"|sed -e "s/\t//g" )
+	codename := $(shell lsb_release -a 2>/dev/null|grep Codename|cut -f2 -d ":"|sed -e "s/\t//g" )
 	@echo "Install mosquitto for $(distro):$(codename)."
-ifneq ('${DEBIANDEPS}','')
-	sudo apt-get install -y ${DEBIANDEPS}
-endif
-	@echo "Install mosquitto dependencies for ${MODULENAME} : $(distro):$(codename)."
 ifeq ($(distro),Debian)
 	wget -qO - http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key | apt-key add -
 	cd /etc/apt/sources.list.d/
@@ -135,14 +131,32 @@ pylint:
 	-mkdir -p ${BUILDDIR}/docs/html/tools/pylint
 	$(PYLINT) --output-format=html $(PYLINTOPTS) src/${MODULENAME} >${BUILDDIR}/docs/html/tools/pylint/index.html
 
-install:
-	${PYTHON_EXEC} setup.py install
+install: develop
 	@echo
 	@echo "Installation of ${MODULENAME} finished."
 
 develop:
 	@echo
 	@echo "Installation for developpers of ${MODULENAME} finished."
+	lsb_release -a
+	distro = $(shell lsb_release -a 2>/dev/null|grep Distributor|cut -f2 -d ":"|sed -e "s/\t//g" )
+	release := $(shell lsb_release -a 2>/dev/null|grep Release|cut -f2 -d ":"|sed -e "s/\t//g" )
+	codename := $(shell lsb_release -a 2>/dev/null|grep Codename|cut -f2 -d ":"|sed -e "s/\t//g" )
+	@echo "Install mosquitto for $(distro):$(codename)."
+ifeq ($(distro),Debian)
+	wget -qO - http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key | apt-key add -
+	cd /etc/apt/sources.list.d/
+	wget http://repo.mosquitto.org/debian/mosquitto-$(codename).list
+	apt-get update
+endif
+ifeq ($(distro),Ubuntu)
+	sudo apt-get install python-software-properties
+	sudo apt-add-repository -y ppa:mosquitto-dev/mosquitto-ppa
+	sudo apt-get update
+endif
+	sudo apt-get install -y --force-yes mosquitto
+	@echo
+	@echo "Dependencies for ${MODULENAME} finished."
 
 travis-deps: deps
 	sudo apt-get -y install libevent-2.0-5 mosquitto
