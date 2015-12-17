@@ -77,8 +77,15 @@ uninstall:
 	-@find . -name \*.egg-info -type d -exec rm -rf "{}" \;
 
 deps:
-	@echo "Install mosquitto dependencies for ${MODULENAME} : $(distro):$(codename)."
+	@echo "Install dependencies for ${MODULENAME}."
+ifneq ('${DEBIANDEPS}','')
+	sudo apt-get install -y ${DEBIANDEPS}
+endif
 	lsb_release -a
+	distro = $(shell lsb_release -a 2>/dev/null|grep Distributor|cut -f2 -d ":"|sed -e "s/\t//g" )
+	release = $(shell lsb_release -a 2>/dev/null|grep Release|cut -f2 -d ":"|sed -e "s/\t//g" )
+	codename = $(shell lsb_release -a 2>/dev/null|grep Codename|cut -f2 -d ":"|sed -e "s/\t//g" )
+	@echo "Install mosquitto for $(distro):$(codename)."
 ifneq ('${DEBIANDEPS}','')
 	sudo apt-get install -y ${DEBIANDEPS}
 endif
@@ -96,7 +103,7 @@ ifeq ($(distro),Ubuntu)
 endif
 	sudo apt-get install -y --force-yes mosquitto
 	@echo
-	@echo "Mosquitto dependencies for ${MODULENAME} finished."
+	@echo "Dependencies for ${MODULENAME} finished."
 
 clean-doc:
 	-rm -Rf ${BUILDDIR}/docs
