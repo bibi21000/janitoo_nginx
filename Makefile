@@ -126,14 +126,17 @@ develop:
 ifeq ($(distro),Debian)
 	wget -qO - http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key | apt-key add -
 	cd /etc/apt/sources.list.d/ && wget http://repo.mosquitto.org/debian/mosquitto-$(codename).list
-	apt-get update
 endif
 ifeq ($(distro),Ubuntu)
 	sudo apt-get install python-software-properties
 	sudo apt-add-repository -y ppa:mosquitto-dev/mosquitto-ppa
-	sudo apt-get update
 endif
+	sudo apt-get update
 	sudo apt-get install -y --force-yes mosquitto
+	sudo cp websockets.conf /etc/mosquitto/conf.d/
+	sudo service mosquitto restart
+	sleep 2
+	netcat -zv 127.0.0.1 1-11000
 	@echo
 	@echo "Dependencies for ${MODULENAME} finished."
 
@@ -145,10 +148,7 @@ travis-deps: deps
 	@echo "Travis dependencies for ${MODULENAME} installed."
 
 tests:
-	-mkdir -p ${BUILDDIR}/docs/html/tools/coverage
-	-mkdir -p ${BUILDDIR}/docs/html/tools/nosetests
-	#~ export NOSESKIP=False && $(NOSE) $(NOSEOPTS) $(NOSECOVER) tests ; unset NOSESKIP
-	$(NOSE) $(NOSEOPTS) $(NOSECOVER) tests
+	netcat -zv 127.0.0.1 1-11000|grep 10001
 	@echo
 	@echo "Tests for ${MODULENAME} finished."
 
