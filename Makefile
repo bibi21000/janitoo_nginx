@@ -82,9 +82,6 @@ ifneq ('${DEBIANDEPS}','')
 	sudo apt-get install -y ${DEBIANDEPS}
 endif
 	lsb_release -a
-	distro = $(shell lsb_release -a 2>/dev/null|grep Distributor|cut -f2 -d ":"|sed -e "s/\t//g" )
-	release := $(shell lsb_release -a 2>/dev/null|grep Release|cut -f2 -d ":"|sed -e "s/\t//g" )
-	codename := $(shell lsb_release -a 2>/dev/null|grep Codename|cut -f2 -d ":"|sed -e "s/\t//g" )
 	@echo "Install mosquitto for $(distro):$(codename)."
 ifeq ($(distro),Debian)
 	wget -qO - http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key | apt-key add -
