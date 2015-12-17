@@ -81,20 +81,6 @@ deps:
 ifneq ('${DEBIANDEPS}','')
 	sudo apt-get install -y ${DEBIANDEPS}
 endif
-	lsb_release -a
-	@echo "Install mosquitto for $(distro):$(codename)."
-ifeq ($(distro),Debian)
-	wget -qO - http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key | apt-key add -
-	cd /etc/apt/sources.list.d/
-	wget http://repo.mosquitto.org/debian/mosquitto-$(codename).list
-	apt-get update
-endif
-ifeq ($(distro),Ubuntu)
-	sudo apt-get install python-software-properties
-	sudo apt-add-repository -y ppa:mosquitto-dev/mosquitto-ppa
-	sudo apt-get update
-endif
-	sudo apt-get install -y --force-yes mosquitto
 	@echo
 	@echo "Dependencies for ${MODULENAME} finished."
 
