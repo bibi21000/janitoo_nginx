@@ -133,8 +133,10 @@ ifeq ($(distro),Ubuntu)
 endif
 	sudo apt-get update
 	sudo apt-get install -y --force-yes mosquitto
-	sudo cp websockets.conf /etc/mosquitto/conf.d/
+ifneq ($(codename),precise)
 	sudo cp mqtt.conf /etc/mosquitto/conf.d/
+endif
+	sudo cp websockets.conf /etc/mosquitto/conf.d/
 	sudo service mosquitto restart
 	sleep 2
 	netcat -zv 127.0.0.1 1-9999 2>&1|grep succeeded
