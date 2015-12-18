@@ -137,8 +137,10 @@ ifneq ($(codename),precise)
 	sudo cp mqtt.conf /etc/mosquitto/conf.d/
 endif
 	sudo cp websockets.conf /etc/mosquitto/conf.d/
+	cat /etc/mosquitto/mosquitto.conf
 	sudo service mosquitto restart
 	sleep 2
+	cat /var/log/syslog|grep mosquitto
 	netcat -zv 127.0.0.1 1-9999 2>&1|grep succeeded
 	@echo
 	@echo "Dependencies for ${MODULENAME} finished."
