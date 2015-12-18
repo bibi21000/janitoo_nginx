@@ -134,9 +134,10 @@ endif
 	sudo apt-get update
 	sudo apt-get install -y --force-yes mosquitto
 	sudo cp websockets.conf /etc/mosquitto/conf.d/
+	sudo cp mqtt.conf /etc/mosquitto/conf.d/
 	sudo service mosquitto restart
 	sleep 2
-	netcat -zv 127.0.0.1 1-11000 2>&1|grep succeeded
+	netcat -zv 127.0.0.1 1-9999 2>&1|grep succeeded
 	@echo
 	@echo "Dependencies for ${MODULENAME} finished."
 
@@ -148,7 +149,8 @@ travis-deps: deps
 	@echo "Travis dependencies for ${MODULENAME} installed."
 
 tests:
-	netcat -zv 127.0.0.1 1-11000 2>&1|grep 10001
+	netcat -zv 127.0.0.1 1-9999 2>&1|grep 1883
+	netcat -zv 127.0.0.1 1-9999 2>&1|grep 9001
 	@echo
 	@echo "Tests for ${MODULENAME} finished."
 

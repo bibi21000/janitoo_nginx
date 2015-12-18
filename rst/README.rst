@@ -9,6 +9,8 @@ This is the job of this module. It installs packages for Debian, Ubuntu and Rasp
 Configuration
 =============
 
-Websockets are listen on all addresses on port 10001. This is not secure.
+Websockets are listen on all addresses on port 9001. This is not secure.
 
 We must use https://www.nginx.com/blog/websocket-nginx/ in production.
+
+mqtt is on 1883.
