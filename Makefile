@@ -134,13 +134,14 @@ endif
 	sudo apt-get update
 	sudo apt-get install -y --force-yes mosquitto
 ifneq ($(codename),precise)
-	sudo cp mqtt.conf /etc/mosquitto/conf.d/
-endif
+	#No websocket for precise
 	sudo cp websockets.conf /etc/mosquitto/conf.d/
+endif
+	sudo cp mqtt.conf /etc/mosquitto/conf.d/
 	cat /etc/mosquitto/mosquitto.conf
 	sudo service mosquitto restart
 	sleep 2
-	cat /var/log/syslog|grep mosquitto
+	cat /var/log/mosquitto/mosquitto.log|grep mosquitto
 	netcat -zv 127.0.0.1 1-9999 2>&1|grep succeeded
 	@echo
 	@echo "Dependencies for ${MODULENAME} finished."
@@ -154,7 +155,10 @@ travis-deps: deps
 
 tests:
 	netcat -zv 127.0.0.1 1-9999 2>&1|grep 1883
+ifneq ($(codename),precise)
+	#No websocket for precise
 	netcat -zv 127.0.0.1 1-9999 2>&1|grep 9001
+endif
 	@echo
 	@echo "Tests for ${MODULENAME} finished."
 
