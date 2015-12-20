@@ -118,30 +118,41 @@ install: develop
 	@echo
 	@echo "Installation of ${MODULENAME} finished."
 
-develop:
+/etc/apt/sources.list.d/nginx.list:
 	@echo
-	@echo "Installation for developpers of ${MODULENAME} finished."
+	@echo "Installation for source for nginx ($(distro):$(codename))."
 	lsb_release -a
-	@echo "Install mosquitto for $(distro):$(codename)."
+	wget -qO - http://nginx.org/keys/nginx_signing.key | sudo apt-key add -
 ifeq ($(distro),Debian)
-	wget -qO - http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key | apt-key add -
-	cd /etc/apt/sources.list.d/ && wget http://repo.mosquitto.org/debian/mosquitto-$(codename).list
+	echo "deb http://nginx.org/packages/debian/ $(codename) nginx" | sudo tee -a /etc/apt/sources.list.d/nginx.list
 endif
 ifeq ($(distro),Ubuntu)
-	sudo apt-get install python-software-properties
-	sudo apt-add-repository -y ppa:mosquitto-dev/mosquitto-ppa
+	echo "deb http://nginx.org/packages/ubuntu/ $(codename) nginx" | sudo tee -a /etc/apt/sources.list.d/nginx.list
 endif
 	sudo apt-get update
-	sudo apt-get install -y --force-yes mosquitto
-ifneq ($(codename),precise)
-	#No websocket for precise
-	sudo cp websockets.conf /etc/mosquitto/conf.d/
-endif
-	sudo cp mqtt.conf /etc/mosquitto/conf.d/
-	cat /etc/mosquitto/mosquitto.conf
-	sudo service mosquitto restart
+	sudo apt-get remove -y --force-yes nginx nginx-common nginx-full
+	sudo apt-get install -y --force-yes nginx
+
+/etc/nginx/ssl:
+	sudo mkdir /etc/nginx/ssl
+	openssl genrsa -aes256 4096|sudo tee -a /etc/nginx/ssl/default_blank.key
+	sudo openssl rsa -in /etc/nginx/ssl/default_blank.key -out /etc/nginx/ssl/default_blank.key
+	sudo openssl req -new -key /etc/nginx/ssl/default_blank.key -out /etc/nginx/ssl/default_blank.csr
+	sudo openssl x509 -req -days 1460 -in /etc/nginx/ssl/default_blank.csr -signkey /etc/nginx/ssl/default_blank.key -out /etc/nginx/ssl/default_blank.crt
+
+develop: /etc/apt/sources.list.d/nginx.list /etc/nginx/ssl
+	@echo
+	@echo "Installation for developpers of ${MODULENAME} finished."
+	@echo "Install nginx for $(distro):$(codename)."
+#~ ifneq ($(codename),precise)
+	#~ #No websocket for precise
+	#~ sudo cp websockets.conf /etc/nginx/sites-available/
+#~ endif
+	test -f /etc/nginx/conf.d/git.conf || sudo cp git.conf /etc/nginx/conf.d/git.conf
+	ls -lisa /etc/nginx/sites-enabled/
+	sudo service nginx restart
 	sleep 2
-	cat /var/log/mosquitto/mosquitto.log|grep mosquitto
+	#~ cat /var/log/mosquitto/mosquitto.log|grep mosquitto
 	netcat -zv 127.0.0.1 1-9999 2>&1|grep succeeded
 	@echo
 	@echo "Dependencies for ${MODULENAME} finished."
@@ -154,11 +165,7 @@ travis-deps: deps
 	@echo "Travis dependencies for ${MODULENAME} installed."
 
 tests:
-	netcat -zv 127.0.0.1 1-9999 2>&1|grep 1883
-ifneq ($(codename),precise)
-	#No websocket for precise
-	netcat -zv 127.0.0.1 1-9999 2>&1|grep 9001
-endif
+	netcat -zv 127.0.0.1 1-9999 2>&1|grep 8085
 	@echo
 	@echo "Tests for ${MODULENAME} finished."
 

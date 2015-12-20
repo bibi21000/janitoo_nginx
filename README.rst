@@ -1,10 +1,10 @@
-============================
-Welcome to janitoo_mosquitto
-============================
+========================
+Welcome to janitoo_nginx
+========================
 
-As we need websockets support, we must install a recent version of mosquitto.
+We must install a recent stable version of nginx.
 
-This is the job of this module. It installs packages for Debian, Ubuntu and Raspdebian using method listed here : http://mosquitto.org/download/
+This is the job of this module. It installs packages for Debian, Ubuntu and Raspdebian using method listed here : http://nginx.org/en/linux_packages.html#stable
 
 Configuration
 =============

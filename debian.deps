@@ -1,1 +1,1 @@
-lsb-release netcat-openbsd
+openssl gunicorn
