@@ -160,12 +160,12 @@ develop: /etc/apt/sources.list.d/nginx.list
 
 travis-deps: deps
 	sudo apt-get -y install libevent-2.0-5 mosquitto wget curl
+	sudo mkdir -p /opt/janitoo/src/janitoo_nginx
 	@echo
 	@echo "Travis dependencies for ${MODULENAME} installed."
 
 tests:
 	netcat -zv 127.0.0.1 1-9999 2>&1|grep 8085
-	mkdir -p /opt/janitoo/src/janitoo_nginx
 	-curl -Is http://127.0.0.1:8085/
 	curl -Is http://127.0.0.1:8085/|head -n 1|grep 200
 	-curl -Is http://127.0.0.1:8085/janitoo_nginx/
