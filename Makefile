@@ -167,6 +167,8 @@ travis-deps: deps
 
 tests:
 	netcat -zv 127.0.0.1 1-9999 2>&1|grep 8085
+	curl -Is http://127.0.0.1:8085/janitoo/ | head -n 1 | grep 200
+	curl -Is http://127.0.0.1:8085/baddir/ | head -n 1 | grep 404
 	@echo
 	@echo "Tests for ${MODULENAME} finished."
 
