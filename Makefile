@@ -153,7 +153,7 @@ develop: /etc/apt/sources.list.d/nginx.list /etc/nginx/ssl
 	sudo service nginx restart
 	sleep 2
 	#~ cat /var/log/mosquitto/mosquitto.log|grep mosquitto
-	netcat -zv 127.0.0.1 1-9999 2>&1|grep succeeded || echo "No service found"
+	-netcat -zv 127.0.0.1 1-9999 2>&1|grep succeeded || echo "No service found"
 	@echo
 	@echo "Dependencies for ${MODULENAME} finished."
 
