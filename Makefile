@@ -159,12 +159,13 @@ develop: /etc/apt/sources.list.d/nginx.list
 	@echo "Dependencies for ${MODULENAME} finished."
 
 travis-deps: deps
-	sudo apt-get -y install libevent-2.0-5 mosquitto
+	sudo apt-get -y install libevent-2.0-5 mosquitto wget curl
 	@echo
 	@echo "Travis dependencies for ${MODULENAME} installed."
 
 tests:
 	netcat -zv 127.0.0.1 1-9999 2>&1|grep 8085
+	-wget -o - http://127.0.0.1:8085/janitoo/
 	curl -Is http://127.0.0.1:8085/janitoo/ | head -n 1 | grep 200
 	curl -Is http://127.0.0.1:8085/baddir/ | head -n 1 | grep 404
 	@echo
