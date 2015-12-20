@@ -131,7 +131,7 @@ ifeq ($(distro),Ubuntu)
 endif
 	sudo apt-get update
 	sudo apt-get remove -y --force-yes nginx nginx-common nginx-full
-	echo "key\nkey\n"|sudo apt-get install -y --force-yes nginx
+	sudo apt-get install -y --force-yes nginx
 
 /etc/nginx/ssl:
 	sudo mkdir /etc/nginx/ssl
@@ -140,7 +140,7 @@ endif
 	sudo openssl req -new -key /etc/nginx/ssl/default_blank.key -out /etc/nginx/ssl/default_blank.csr
 	sudo openssl x509 -req -days 1460 -in /etc/nginx/ssl/default_blank.csr -signkey /etc/nginx/ssl/default_blank.key -out /etc/nginx/ssl/default_blank.crt
 
-develop: /etc/apt/sources.list.d/nginx.list /etc/nginx/ssl
+develop: /etc/apt/sources.list.d/nginx.list
 	@echo
 	@echo "Installation for developpers of ${MODULENAME} finished."
 	@echo "Install nginx for $(distro):$(codename)."
