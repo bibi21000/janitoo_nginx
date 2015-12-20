@@ -160,8 +160,6 @@ develop: /etc/apt/sources.list.d/nginx.list
 
 travis-deps: deps
 	sudo apt-get -y install libevent-2.0-5 mosquitto
-	pip install git+git://github.com/bibi21000/janitoo_nosetests@master
-	pip install coveralls
 	@echo
 	@echo "Travis dependencies for ${MODULENAME} installed."
 
