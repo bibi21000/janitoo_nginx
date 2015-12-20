@@ -131,7 +131,7 @@ ifeq ($(distro),Ubuntu)
 endif
 	sudo apt-get update
 	sudo apt-get remove -y --force-yes nginx nginx-common nginx-full
-	sudo apt-get install -y --force-yes nginx
+	echo "key\nkey\n"|sudo apt-get install -y --force-yes nginx
 
 /etc/nginx/ssl:
 	sudo mkdir /etc/nginx/ssl
@@ -148,6 +148,7 @@ develop: /etc/apt/sources.list.d/nginx.list /etc/nginx/ssl
 	#~ #No websocket for precise
 	#~ sudo cp websockets.conf /etc/nginx/sites-available/
 #~ endif
+	sudo apt-get install -y nginx
 	test -f /etc/nginx/conf.d/git.conf || sudo cp git.conf /etc/nginx/conf.d/git.conf
 	ls -lisa /etc/nginx/sites-enabled/
 	sudo service nginx restart
