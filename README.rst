@@ -1,3 +1,7 @@
+.. image:: https://travis-ci.org/bibi21000/janitoo_nginx.svg?branch=master
+    :target: https://travis-ci.org/bibi21000/janitoo_nginx
+    :alt: Travis status
+
 ========================
 Welcome to janitoo_nginx
 ========================
