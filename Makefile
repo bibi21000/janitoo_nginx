@@ -150,11 +150,11 @@ develop: /etc/apt/sources.list.d/nginx.list
 #~ endif
 	sudo apt-get install -y nginx
 	test -f /etc/nginx/conf.d/git.conf || sudo cp git.conf /etc/nginx/conf.d/git.conf
-	ls -lisa /etc/nginx/sites-enabled/
+	ls -lisa /etc/nginx/conf.d/
 	sudo service nginx restart
 	sleep 2
 	#~ cat /var/log/mosquitto/mosquitto.log|grep mosquitto
-	-netcat -zv 127.0.0.1 1-9999 2>&1|grep succeeded || echo "No service found"
+	-netcat -zv 127.0.0.1 1-9999 2>&1|grep succeeded
 	@echo
 	@echo "Dependencies for ${MODULENAME} finished."
 
