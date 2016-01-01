@@ -144,16 +144,12 @@ develop: /etc/apt/sources.list.d/nginx.list
 	@echo
 	@echo "Installation for developpers of ${MODULENAME} finished."
 	@echo "Install nginx for $(distro):$(codename)."
-#~ ifneq ($(codename),precise)
-	#~ #No websocket for precise
-	#~ sudo cp websockets.conf /etc/nginx/sites-available/
-#~ endif
 	sudo apt-get install -y nginx
 	test -f /etc/nginx/conf.d/git.conf || sudo cp git.conf /etc/nginx/conf.d/git.conf
+	test -d /var/cache/nginx/cache_temp || sudo mkdir /var/cache/nginx/cache_temp
 	ls -lisa /etc/nginx/conf.d/
 	sudo service nginx restart
 	sleep 2
-	#~ cat /var/log/mosquitto/mosquitto.log|grep mosquitto
 	-netcat -zv 127.0.0.1 1-9999 2>&1|grep succeeded
 	@echo
 	@echo "Dependencies for ${MODULENAME} finished."
