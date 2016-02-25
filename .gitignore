@@ -63,4 +63,5 @@ archive/
 generated_doc
 janidoc
 flask_cache_store/
+tmp/
 
