@@ -48,7 +48,7 @@ codename = $(shell lsb_release -a 2>/dev/null|grep Codename|cut -f2 -d ":"|sed -
 
 -include Makefile.local
 
-.PHONY: help check-tag clean all build develop install uninstall clean-doc doc certification tests pylint deps
+.PHONY: help check-tag clean all build develop install uninstall clean-doc doc certification tests pylint deps docker-tests
 
 help:
 	@echo "Please use \`make <target>' where <target> is one of"
