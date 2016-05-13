@@ -19,3 +19,7 @@ We must use https://www.nginx.com/blog/websocket-nginx/ in production.
 
 mqtt is on 1883.
 
+Documentation
+=============
+You can browse online documentation here : https://bibi21000.github.io/janitoo_nginx/.
+
